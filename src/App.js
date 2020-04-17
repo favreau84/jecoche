@@ -16,7 +16,6 @@ function App() {
 
   const onReasonsFormChange = function(r){
     setReasons(r);
-    console.log(r)
   }
   const onCreateCertificateBtnClick = async function(){
     const newCertif = new Certificate({profile, reasons})
@@ -24,11 +23,14 @@ function App() {
     newCertif.downloadPdf();
   }
 
+  const onProfileSubmit = function(newProfile){
+    setProfile({...profile,...newProfile})
+  }
   return (
     <div className="App">
        <OutingReasonsCheckboxes onChange = {onReasonsFormChange}/>
        <CreateCertificateButton onClick = {onCreateCertificateBtnClick}/>
-       <Profile/>
+       <Profile onSubmit = {onProfileSubmit}/>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import {TextField, Button} from '@material-ui/core'
+import storage from '../services/storage'
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Profile(){
+export default function Profile(props){
 
     const classes = useStyles();
 
@@ -23,13 +24,34 @@ export default function Profile(){
         birthPlace: ''
     })
 
+    React.useEffect(()=>{
+        async function getStoredProfile(){
+            const storedProfile =  await storage.getProfile()
+            setProfile(profile => ({...profile,...storedProfile}))
+            console.log(storedProfile)
+        }
+        getStoredProfile();
+    },[])
+
+    function onProfileSubmit(){
+        storage.saveProfile(profile);
+        props.onSubmit(profile)
+    }
+
+    function onFieldChange(id,value){
+           setProfile(profile => ({...profile,[id]:value}))
+    }
 
 
     return (
         <div className={classes.root}>
             <form>
                 <div>
-                    <TextField id="firstName" label="Prénom" variant="filled" />
+                    <TextField id="firstName" 
+                    label="Prénom" 
+                    variant="filled" 
+                    onChange={({target: {id,value}})=>onFieldChange(id,value)} 
+                    value={profile.firstName}/>
                 </div>
                 <div>
                     <TextField id="lastName" label="Nom" variant="filled" />
@@ -41,7 +63,7 @@ export default function Profile(){
                     <TextField id="birthPlace" label="A" variant="filled" />
                 </div> 
                 <div>
-                    <Button variant="contained" color='primary' > Enregistrer </Button>
+                    <Button onClick={onProfileSubmit} variant="contained" color='primary' > Enregistrer </Button>
                 </div>   
             </form>
             
