@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) =>({
     }
 }))
 
-const OutingReasonsCheckboxes = function(){
+const OutingReasonsCheckboxes = function(props){
     
     const getInitialState = function(){
         let initialState = {}
@@ -28,8 +28,12 @@ const OutingReasonsCheckboxes = function(){
 
     const classes = useStyles();
 
+    React.useEffect(() => {
+        props.onChange(state)
+    },[state]);
+
     const handleChange = function(event){
-        setState({...state,[event.target.name]:event.target.checked})
+        setState(state => ({...state,[event.target.name]:event.target.checked}))
     }
     return(
         <FormControl component="fieldset" className={classes.formControl}>
