@@ -30,7 +30,7 @@ const OutingReasonsCheckboxes = function(props){
 
     React.useEffect(() => {
         props.onChange(state)
-    },[state]);
+    },[state,props]);
 
     const handleChange = function(event){
         setState(state => ({...state,[event.target.name]:event.target.checked}))
