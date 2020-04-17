@@ -1,6 +1,7 @@
 import React from 'react';
 import CreateCertificateButton from './components/CreateCertificateButton'
 import OutingReasonsCheckboxes from './components/OutingReasonsCheckboxes'
+import Profile from './components/Profile'
 import Certificate from './services/certificate/certificate'
 
 import './App.css';
@@ -27,6 +28,7 @@ function App() {
     <div className="App">
        <OutingReasonsCheckboxes onChange = {onReasonsFormChange}/>
        <CreateCertificateButton onClick = {onCreateCertificateBtnClick}/>
+       <Profile/>
     </div>
   );
 }
