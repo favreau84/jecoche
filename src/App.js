@@ -1,9 +1,11 @@
 import React from 'react';
+import {BrowserRouter, Route, Link} from 'react-router-dom'
 import CreateCertificateButton from './components/CreateCertificateButton'
 import OutingReasonsCheckboxes from './components/OutingReasonsCheckboxes'
 import Profile from './components/Profile'
 import ProfileButton from'./components/ProfileButton'
 import Certificate from './services/certificate/certificate'
+
 
 import './App.css';
 
@@ -29,10 +31,15 @@ function App() {
   }
   return (
     <div className="App">
-       <ProfileButton/>
-       <OutingReasonsCheckboxes onChange = {onReasonsFormChange}/>
-       <CreateCertificateButton onClick = {onCreateCertificateBtnClick}/>
-       <Profile onSubmit = {onProfileSubmit}/>
+      <BrowserRouter>
+        <Link to="/profile">
+          <ProfileButton/>
+        </Link>
+        <OutingReasonsCheckboxes onChange = {onReasonsFormChange}/>
+        <CreateCertificateButton onClick = {onCreateCertificateBtnClick}/>
+        <Route path="/profile" render={()=><Profile onSubmit = {onProfileSubmit}/>}/>
+      </BrowserRouter>
+
     </div>
   );
 }
