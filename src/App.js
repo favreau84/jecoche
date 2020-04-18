@@ -22,7 +22,8 @@ function App() {
     firstName:'',
     lastName:'',
     birthDate:'',
-    birthPlace: ''
+    birthPlace: '',
+    address:""
   }
 
   const[profile, setProfile] = usePersistedState("profile",_initialProfile)

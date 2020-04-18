@@ -3,20 +3,34 @@ import basePdf from './certificate.pdf'
 
 class Certificate {
     
-    constructor({profile:{firstName,lastName},reasons:{work,shopping,health}}){
+    constructor({profile:{firstName,lastName,birthDate,birthPlace,address},reasons:{work,shopping,health,family,sport,justice,missions}}){
         this.fields = {};
         this.fields.name = `${firstName} ${lastName}`;
+        this.fields.birthDate = birthDate
+        this.fields.birthPlace = birthPlace
+        this.fields.address = address
         this.fields.work = work ? 'x' : '';
         this.fields.shopping = shopping ? 'x' : '';
         this.fields.health = health ? 'x' : '';
+        this.fields.family = family ? 'x' : '';
+        this.fields.sport = sport ? 'x' : '';
+        this.fields.justice = justice ? 'x' : '';
+        this.fields.missions = missions ? 'x' : '';
         this.pdfBlob = null
     }
 
     template = {
         name: {x: 123, y: 686, size:11},
+        birthDate: {x: 123, y: 661, size:11},
+        birthPlace: {x: 92, y: 638, size:11},
+        address: {x: 134, y: 616, size:11},
         work: {x: 76, y:527, size:19},
         shopping: {x:76, y:478, size:19},
-        health: {x:76, y:436, size:19 }
+        health: {x:76, y:436, size:19 },
+        family: {x:76, y:400, size:19 },
+        sport: {x:76, y:345, size:19 },
+        justice: {x:76, y:298, size:19 },
+        missions: {x:76, y:260, size:19 }
     };
 
     generatePdf =  async function(){

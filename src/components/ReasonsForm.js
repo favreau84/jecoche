@@ -6,6 +6,10 @@ const outingReasons = [
     {id:'work', title:'Travail'},
     {id:'shopping', title:'Courses'},
     {id:'health', title:'Santé'},
+    {id:'family', title:'Famille'},
+    {id:'sport', title:'Sport'},
+    {id:'justice', title:'Justice'},
+    {id:'missions', title:'Missions'},
 ];
 
 const useStyles = makeStyles((theme) =>({

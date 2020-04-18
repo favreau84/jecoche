@@ -49,13 +49,32 @@ function Profile(props){
                     value={profile.firstName}/>
                 </div>
                 <div>
-                    <TextField id="lastName" label="Nom" variant="filled" />
+                    <TextField id="lastName" 
+                    label="Nom" 
+                    variant="filled" 
+                    onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
+                    value={profile.lastName}/>
                 </div>
                 <div>
-                    <TextField id="birthDay" label="Né le" variant="filled" type="date"/>
+                    <TextField id="birthDate" 
+                    label="Date de naissance" 
+                    variant="filled" 
+                    onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
+                    value={profile.birthDate}/>
                 </div>
                 <div>
-                    <TextField id="birthPlace" label="A" variant="filled" />
+                    <TextField id="birthPlace" 
+                    label="Lieu de naissance" 
+                    variant="filled" 
+                    onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
+                    value={profile.birthPlace}/>
+                </div>
+                <div>
+                    <TextField id="address" 
+                    label="Adresse" 
+                    variant="filled" 
+                    onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
+                    value={profile.address}/>
                 </div> 
                 <div>
                     <Button onClick={handleProfileSubmit} variant="contained" color='primary' > Enregistrer </Button>
