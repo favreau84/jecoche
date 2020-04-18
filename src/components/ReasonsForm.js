@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) =>({
     }
 }))
 
-const OutingReasonsCheckboxes = function(props){
+const ReasonsForm = function(props){
     
     const getInitialState = function(){
         let initialState = {}
@@ -56,4 +56,4 @@ const OutingReasonsCheckboxes = function(props){
     )
 }
 
-export default OutingReasonsCheckboxes
+export default ReasonsForm

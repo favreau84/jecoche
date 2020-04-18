@@ -5,7 +5,7 @@ const style = {
     margin: "10px"
 }
 
-export default function CreateCertificateButton(props) {
+export default function CreateButton(props) {
     
     return (
         <div>

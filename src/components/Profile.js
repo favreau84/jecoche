@@ -1,5 +1,8 @@
 import React from 'react'
-import {TextField, Button} from '@material-ui/core'
+import {withRouter} from 'react-router-dom'
+
+import {TextField, Button, IconButton} from '@material-ui/core'
+import {Close} from '@material-ui/icons'
 import storage from '../services/storage'
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,44 +16,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Profile(props){
+function Profile(props){
 
     const classes = useStyles();
 
-    const [profile, setProfile] = React.useState({
-        firstName:'',
-        lastName:'',
-        birthDate:'',
-        birthPlace: ''
-    })
+    const [profile, setProfile] = React.useState(()=>props.profile)
 
-    React.useEffect(()=>{
-        async function getStoredProfile(){
-            const storedProfile =  await storage.getProfile()
-            setProfile(profile => ({...profile,...storedProfile}))
-            console.log(storedProfile)
-        }
-        getStoredProfile();
-    },[])
-
-    function onProfileSubmit(){
+    function handleProfileSubmit(){
         storage.saveProfile(profile);
-        props.onSubmit(profile)
+        props.onSubmit(profile);
+        props.history.push('/');
     }
 
-    function onFieldChange(id,value){
-           setProfile(profile => ({...profile,[id]:value}))
+    function handleFieldChange(id,value){
+        setProfile(profile => ({...profile,[id]:value}))
     }
 
-
+    function handleClose(){
+        props.history.push('/')
+    }
+    
     return (
         <div className={classes.root}>
+            <IconButton onClick={handleClose}>
+                <Close/>
+            </IconButton>
             <form>
                 <div>
                     <TextField id="firstName" 
                     label="Prénom" 
                     variant="filled" 
-                    onChange={({target: {id,value}})=>onFieldChange(id,value)} 
+                    onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
                     value={profile.firstName}/>
                 </div>
                 <div>
@@ -63,10 +59,12 @@ export default function Profile(props){
                     <TextField id="birthPlace" label="A" variant="filled" />
                 </div> 
                 <div>
-                    <Button onClick={onProfileSubmit} variant="contained" color='primary' > Enregistrer </Button>
+                    <Button onClick={handleProfileSubmit} variant="contained" color='primary' > Enregistrer </Button>
                 </div>   
             </form>
             
         </div>
     )
 }
+
+export default withRouter(Profile)
