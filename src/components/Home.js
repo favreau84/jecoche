@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-dom'
 import CreateButton from './CreateButton'
 import ReasonsForm from './ReasonsForm'
 import ProfileButton from'./ProfileButton'
+import OutingDateTime from './OutingDateTime'
 import Certificate from '../services/certificate/certificate'
 
 function Home(props) {
@@ -26,8 +27,13 @@ function Home(props) {
       props.history.push('/profile')
   }
 
+  function handleOutingDateTimeChange(newOutingDateTime){
+      return props.onOutingDateTimeChange(newOutingDateTime)
+  }
+
   return (
     <div>
+        <OutingDateTime onChange={handleOutingDateTimeChange} outingDateTime={props.outingDateTime}/>
         <ProfileButton onClick={handleProfileButtonClick}/>
         <ReasonsForm onChange = {handleReasonsFormChange}/>
         <CreateButton onClick = {handleCreateButtonClick}/>
