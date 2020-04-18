@@ -69,12 +69,27 @@ function Profile(props){
                     value={profile.birthPlace}/>
                 </div>
                 <div>
-                    <TextField id="address" 
+                    <TextField id="addressStreet" 
                     label="Adresse" 
                     variant="filled" 
                     onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
-                    value={profile.address}/>
-                </div> 
+                    value={profile.addressStreet}/>
+                </div>
+                <div>
+                    <TextField id="addressZipcode" 
+                    label="Code postal"
+                    type="number" 
+                    variant="filled" 
+                    onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
+                    value={profile.addressZipcode}/>
+                </div>
+                <div>
+                    <TextField id="addressCity" 
+                    label="Ville" 
+                    variant="filled" 
+                    onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
+                    value={profile.addressCity}/>
+                </div>
                 <div>
                     <Button onClick={handleProfileSubmit} variant="contained" color='primary' > Enregistrer </Button>
                 </div>   

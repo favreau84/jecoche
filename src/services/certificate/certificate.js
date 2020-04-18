@@ -4,15 +4,36 @@ import Qrcode from '../qrcode'
 
 class Certificate {
     
-    constructor({outingDateTime: {outingDate, outingTime}, profile:{firstName,lastName,birthDate,birthPlace,address},reasons:{work,shopping,health,family,sport,justice,missions}}){
+    constructor({outingDateTime: {outingDate, outingTime}, profile:{firstName,lastName,birthDate,birthPlace,addressCity,addressStreet, addressZipcode},reasons}){
+        
+        const {work,shopping,health,family,sport,justice,missions} = reasons
+        function _setReasons(reasonsObject){
+            const mapping = {
+                work: "travail",
+                shopping : "courses",
+                health : "sante",
+                family: "famille",
+                sport: "sport",
+                justice: "judiciaire",
+                missions: "missions"
+            };
+            const reasons = Object.keys(mapping).map(reason => reasonsObject[reason] ? mapping[reason] : '')
+            .filter(reasonFr => !!reasonFr).join("-")
+            console.log(reasons)
+            return reasons
+        }
+
         this.fields = {};
         this.inputs = {};
         this.inputs.firstName = firstName;
         this.inputs.lastName = lastName;
+        this.inputs.addressStreet = addressStreet;
+        this.inputs.addressCity = addressCity;
+        this.inputs.addressZipcode = addressZipcode;
         this.fields.name = `${firstName} ${lastName}`;
         this.fields.birthDate = birthDate
         this.fields.birthPlace = birthPlace
-        this.fields.address = address
+        this.fields.address = `${addressStreet} ${addressZipcode} ${addressCity}`
         this.fields.work = work ? 'x' : '';
         this.fields.shopping = shopping ? 'x' : '';
         this.fields.health = health ? 'x' : '';
@@ -20,9 +41,11 @@ class Certificate {
         this.fields.sport = sport ? 'x' : '';
         this.fields.justice = justice ? 'x' : '';
         this.fields.missions = missions ? 'x' : '';
+        this.fields.outingLocation = addressCity;
         this.fields.outingDate = outingDate;
         this.fields.outingHours = outingTime.split('h')[0];
         this.fields.outingMinutes = outingTime.split('h')[1];
+        this.inputs.reasons = _setReasons(reasons)
         this.pdfBlob = null
     }
 
@@ -38,6 +61,7 @@ class Certificate {
         sport: {x:76, y:345, size:19 },
         justice: {x:76, y:298, size:19 },
         missions: {x:76, y:260, size:19 },
+        outingLocation: {x:111, y:226,size:11},
         outingHours : {x:200, y:201, size:11 },
         outingMinutes : {x:220, y:201, size:11 },
         outingDate : {x:92, y:200, size:11 },
@@ -73,13 +97,13 @@ class Certificate {
                 firstName: this.inputs.firstName, 
                 birthDate: this.fields.birthDate, 
                 birthPlace: this.fields.birthPlace, 
-                addressStreet: this.fields.address, 
-                addressZipcode: '69006', 
-                addressCity: 'Lyon', 
+                addressStreet: this.inputs.addressStreet, 
+                addressZipcode: this.inputs.addressZipcode, 
+                addressCity: this.inputs.addressCity, 
                 outingDate: this.fields.outingDate, 
                 outingHours : this.fields.outingHours, 
                 outingMinutes : this.fields.outingMinutes, 
-                reasons: 'sport'
+                reasons: this.inputs.reasons
             }
         );
         const generatedQR = await qr.generateQR()
