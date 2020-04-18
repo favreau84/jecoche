@@ -10,6 +10,7 @@ import Certificate from '../services/certificate/certificate'
 function Home(props) {
 
   const profile = props.profile
+  const outingDateTime = props.outingDateTime
 
   const[reasons, setReasons] = React.useState({work: false, shopping: false, health: false});
 
@@ -18,7 +19,7 @@ function Home(props) {
   }
 
   async function handleCreateButtonClick(){
-    const newCertif = new Certificate({profile, reasons})
+    const newCertif = new Certificate({outingDateTime,profile, reasons})
     await newCertif.generatePdf();
     newCertif.downloadPdf();
   }

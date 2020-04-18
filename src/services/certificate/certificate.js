@@ -4,7 +4,7 @@ import Qrcode from '../qrcode'
 
 class Certificate {
     
-    constructor({profile:{firstName,lastName,birthDate,birthPlace,address},reasons:{work,shopping,health,family,sport,justice,missions}}){
+    constructor({outingDateTime: {outingDate, outingTime}, profile:{firstName,lastName,birthDate,birthPlace,address},reasons:{work,shopping,health,family,sport,justice,missions}}){
         this.fields = {};
         this.inputs = {};
         this.inputs.firstName = firstName;
@@ -20,6 +20,9 @@ class Certificate {
         this.fields.sport = sport ? 'x' : '';
         this.fields.justice = justice ? 'x' : '';
         this.fields.missions = missions ? 'x' : '';
+        this.fields.outingDate = outingDate;
+        this.fields.outingHours = outingTime.split('h')[0];
+        this.fields.outingMinutes = outingTime.split('h')[1];
         this.pdfBlob = null
     }
 
@@ -34,7 +37,10 @@ class Certificate {
         family: {x:76, y:400, size:19 },
         sport: {x:76, y:345, size:19 },
         justice: {x:76, y:298, size:19 },
-        missions: {x:76, y:260, size:19 }
+        missions: {x:76, y:260, size:19 },
+        outingHours : {x:200, y:201, size:11 },
+        outingMinutes : {x:220, y:201, size:11 },
+        outingDate : {x:92, y:200, size:11 },
     };
 
     generatePdf =  async function(){
