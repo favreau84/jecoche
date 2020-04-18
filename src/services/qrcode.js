@@ -2,14 +2,14 @@ import QRCode from 'qrcode'
 
 class Qrcode {
 
-    constructor({createdAtDate, createdAtTime, lastName, firstName, birthDate, birthPlace, addressStreet, addressZipcode, addressCity, outingDate, outingHour, outingMinutes, reasons}){
+    constructor({createdAtDate, createdAtTime, lastName, firstName, birthDate, birthPlace, addressStreet, addressZipcode, addressCity, outingDate, outingHours, outingMinutes, reasons}){
         this.qrcodeText = [
             `Cree le: ${createdAtDate} a ${createdAtTime}`,
             `Nom: ${lastName}`,
             `Prenom: ${firstName}`,
             `Naissance: ${birthDate} a ${birthPlace}`,
             `Adresse: ${addressStreet} ${addressZipcode} ${addressCity}`,
-            `Sortie: ${outingDate} a ${outingHour}h${outingMinutes}`,
+            `Sortie: ${outingDate} a ${outingHours}h${outingMinutes}`,
             `Motifs: ${reasons}`,
           ].join('; ')
     }

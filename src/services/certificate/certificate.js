@@ -44,6 +44,9 @@ class Certificate {
     };
 
     generatePdf =  async function(){
+        const pdfGenerationDate = new Date().toLocaleDateString('fr-FR')
+        const pdfGenerationTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', 'h')
+
         const basePdfBytes = await fetch(basePdf).then(res => res.arrayBuffer())
         const pdf = await PDFDocument.load(basePdfBytes)
         const font = await pdf.embedFont(StandardFonts.Helvetica)
@@ -57,22 +60,26 @@ class Certificate {
                 font:font
             })
         }
+        // Date création
+            p1.drawText('Date de création:', {x:464,y:150,size:7,font:font});
+            p1.drawText(`${pdfGenerationDate} à ${pdfGenerationTime}`,{x:455,y:144,size:7,font:font});
+
         //Add qrcode
         const qr = new Qrcode(
             {
-                createdAtDate:'TODO', 
-                createdAtTime:'TODO', 
-                lastName: this.fields.lastName, 
-                firstName: this.fields.firstName, 
+                createdAtDate: pdfGenerationDate, 
+                createdAtTime:pdfGenerationTime, 
+                lastName: this.inputs.lastName, 
+                firstName: this.inputs.firstName, 
                 birthDate: this.fields.birthDate, 
-                birthPlace: this.fields.birthDate, 
+                birthPlace: this.fields.birthPlace, 
                 addressStreet: this.fields.address, 
-                addressZipcode: 'TODO', 
-                addressCity: 'TODO', 
-                outingDate: 'TODO', 
-                outingHour : 'TODO', 
-                outingMinutes : 'TODO', 
-                reasons: 'TODO'
+                addressZipcode: '69006', 
+                addressCity: 'Lyon', 
+                outingDate: this.fields.outingDate, 
+                outingHours : this.fields.outingHours, 
+                outingMinutes : this.fields.outingMinutes, 
+                reasons: 'sport'
             }
         );
         const generatedQR = await qr.generateQR()

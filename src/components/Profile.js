@@ -3,7 +3,6 @@ import {withRouter} from 'react-router-dom'
 
 import {TextField, Button, IconButton} from '@material-ui/core'
 import {Close} from '@material-ui/icons'
-import storage from '../services/storage'
 
 import { makeStyles } from '@material-ui/core/styles';
 
