@@ -23,7 +23,6 @@ function Profile(props){
     const [profile, setProfile] = React.useState(()=>props.profile)
 
     function handleProfileSubmit(){
-        storage.saveProfile(profile);
         props.onSubmit(profile);
         props.history.push('/');
     }
@@ -35,7 +34,7 @@ function Profile(props){
     function handleClose(){
         props.history.push('/')
     }
-    
+
     return (
         <div className={classes.root}>
             <IconButton onClick={handleClose}>
@@ -53,7 +52,7 @@ function Profile(props){
                     <TextField id="lastName" label="Nom" variant="filled" />
                 </div>
                 <div>
-                    <TextField id="birthDay" label="Né le" variant="filled" />
+                    <TextField id="birthDay" label="Né le" variant="filled" type="date"/>
                 </div>
                 <div>
                     <TextField id="birthPlace" label="A" variant="filled" />
