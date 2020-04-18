@@ -1,10 +1,14 @@
 import { PDFDocument, StandardFonts } from 'pdf-lib'
 import basePdf from './certificate.pdf'
+import Qrcode from '../qrcode'
 
 class Certificate {
     
     constructor({profile:{firstName,lastName,birthDate,birthPlace,address},reasons:{work,shopping,health,family,sport,justice,missions}}){
         this.fields = {};
+        this.inputs = {};
+        this.inputs.firstName = firstName;
+        this.inputs.lastName = lastName;
         this.fields.name = `${firstName} ${lastName}`;
         this.fields.birthDate = birthDate
         this.fields.birthPlace = birthPlace
@@ -47,6 +51,43 @@ class Certificate {
                 font:font
             })
         }
+        //Add qrcode
+        const qr = new Qrcode(
+            {
+                createdAtDate:'TODO', 
+                createdAtTime:'TODO', 
+                lastName: this.fields.lastName, 
+                firstName: this.fields.firstName, 
+                birthDate: this.fields.birthDate, 
+                birthPlace: this.fields.birthDate, 
+                addressStreet: this.fields.address, 
+                addressZipcode: 'TODO', 
+                addressCity: 'TODO', 
+                outingDate: 'TODO', 
+                outingHour : 'TODO', 
+                outingMinutes : 'TODO', 
+                reasons: 'TODO'
+            }
+        );
+        const generatedQR = await qr.generateQR()
+        const qrImage = await pdf.embedPng(generatedQR)
+        p1.drawImage(qrImage, {
+            x: p1.getWidth() - 170,
+            y: 155,
+            width: 100,
+            height: 100,
+        })
+
+        // add page2 with QRcode
+        pdf.addPage()
+        const p2 = pdf.getPages()[1]
+        p2.drawImage(qrImage, {
+            x: 50,
+            y: p2.getHeight() - 350,
+            width: 300,
+            height: 300,
+        })
+
         const newPdfBytes = await pdf.save();
     
         this.pdfBlob =  new Blob([newPdfBytes], { type: 'application/pdf' })
