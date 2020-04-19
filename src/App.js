@@ -47,7 +47,6 @@ function App() {
   const [outingDateTime, setOutingDateTime] = React.useState(()=>_initializeOutingDateTime());
 
   function handleOutingDateTimeChange(newOutingDateTime){
-    console.log(newOutingDateTime)
     setOutingDateTime({...outingDateTime,...newOutingDateTime})
   }
 

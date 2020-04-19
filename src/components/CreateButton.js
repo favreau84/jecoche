@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button} from '@material-ui/core'
+import {Button, Grid} from '@material-ui/core'
 
 const style = {
     margin: "10px"
@@ -8,15 +8,18 @@ const style = {
 export default function CreateButton(props) {
     
     return (
-        <div>
-            <Button 
-                variant="contained" 
-                color='primary' 
-                style={style}
-                onClick = {props.onClick}
-            > 
-                Générer l'attestation 
-            </Button>    
-        </div>
+        <Grid container justify='flex-end'>
+            <Grid item>
+                <Button 
+                    variant="contained" 
+                    color='primary' 
+                    style={style}
+                    onClick = {props.onClick}
+                > 
+                    Générer l'attestation 
+                </Button> 
+            </Grid>
+        
+        </Grid>
     )
 }

@@ -1,13 +1,12 @@
 import React from 'react'
-import {IconButton} from '@material-ui/core'
-import {Person} from '@material-ui/icons'
+import {Button} from '@material-ui/core'
 
 export default function ProfileButton({onClick}) {
+
     return (
-        <div>
-        <IconButton onClick={onClick} color="primary" variant="outlineds">
-            <Person/>
-        </IconButton>
-        </div>
+
+                <Button  onClick={onClick} variant="outlined">
+                    Modifier
+                </Button>
     )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import {TextField} from '@material-ui/core'
+import {TextField, Typography, Grid} from '@material-ui/core'
 
 export default function OutingDateTime(props) {
 
@@ -8,31 +8,28 @@ export default function OutingDateTime(props) {
         props.onChange({...props.outingDateTime, [id]:value})
     }
 
-    const containerStyle = {
-        display : 'flex',
-        justifyContent : 'space-around',
-        alignContent: 'center'
-    }
-
     return (
         <div >
+            <Typography variant='h6'>
+                Votre sortie
+            </Typography>
             <form>
-                <div style = {containerStyle} >
-                    <div>
+                <Grid container spacing={1} >
+                    <Grid item xs={6}> 
                         <TextField id="outingDate" 
                         label="Date de sortie" 
                         variant="filled" 
                         onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
                         value={props.outingDateTime.outingDate}/>
-                    </div>
-                    <div>
+                    </Grid>
+                    <Grid item xs={6}>
                         <TextField id="outingTime" 
                         label="Heure de sortie" 
                         variant="filled" 
                         onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
                         value={props.outingDateTime.outingTime}/>
-                    </div>
-                </div>
+                    </Grid>
+                </Grid>
             </form>
             
         </div>

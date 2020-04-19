@@ -1,7 +1,9 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
+import {Container, Grid, Paper} from '@material-ui/core'
 
 import CreateButton from './CreateButton'
+import ProfileSummary from './ProfileSummary'
 import ReasonsForm from './ReasonsForm'
 import ProfileButton from'./ProfileButton'
 import OutingDateTime from './OutingDateTime'
@@ -34,10 +36,34 @@ function Home(props) {
 
   return (
     <div>
-        <OutingDateTime onChange={handleOutingDateTimeChange} outingDateTime={props.outingDateTime}/>
-        <ProfileButton onClick={handleProfileButtonClick}/>
-        <ReasonsForm onChange = {handleReasonsFormChange}/>
-        <CreateButton onClick = {handleCreateButtonClick}/>
+        <Container maxWidth='xs'>
+            <Grid container style={{height:'100vh'}} spacing={2} direction='column' alignItems='stretch' justify='space-around'>
+                <Grid item>
+                    <Grid container alignItems='flex-end' justify='space-between'>
+                        <Grid item>
+                            <ProfileSummary profile={profile}/>
+                        </Grid>
+                        <Grid item>
+                            <ProfileButton onClick={handleProfileButtonClick}/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Paper style={{padding:'10px'}}>
+                        <OutingDateTime onChange={handleOutingDateTimeChange} outingDateTime={props.outingDateTime}/>
+                    </Paper>
+                </Grid>
+                <Grid item>
+                    <Paper elevation={6}>
+                        <ReasonsForm onChange = {handleReasonsFormChange}/>
+                        <CreateButton onClick = {handleCreateButtonClick}/>
+                    </Paper>
+                </Grid>
+            </Grid>
+
+        </Container>
+        
+
     </div>
   );
 }
