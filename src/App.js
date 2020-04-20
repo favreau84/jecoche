@@ -5,10 +5,10 @@ import Profile from './components/Profile'
 
 import './App.css';
 
-function App() {
+function App(props) {
 
   //hook
-  function usePersistedState(key, defaultValue) {
+  function _usePersistedState(key, defaultValue) {
     const [state, setState] = React.useState(
       () => JSON.parse(localStorage.getItem(key)) || defaultValue
     );
@@ -17,6 +17,7 @@ function App() {
     }, [key, state]);
     return [state, setState];
   }
+
 
   // profile state
   const _initialProfile = {
@@ -28,7 +29,7 @@ function App() {
     addressZipcode:'',
     addressCity:'',
   }
-  const[profile, setProfile] = usePersistedState("profile",_initialProfile)
+  const[profile, setProfile] = _usePersistedState("profile",_initialProfile)
   
   function handleProfileSubmit(newProfile){
     setProfile({...profile,...newProfile})
