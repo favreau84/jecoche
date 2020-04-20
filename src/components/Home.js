@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
-import {Container, Grid, Paper} from '@material-ui/core'
+import {Container, Grid, Paper, Divider} from '@material-ui/core'
 
 import CreateButton from './CreateButton'
 import ProfileSummary from './ProfileSummary'
@@ -47,20 +47,26 @@ function Home(props) {
                             <ProfileButton onClick={handleProfileButtonClick}/>
                         </Grid>
                     </Grid>
+                </Grid> 
+                <Grid item>
+                    <Divider/>
                 </Grid>
                 <Grid item>
-                    <Paper style={{padding:'10px'}}>
                         <OutingDateTime onChange={handleOutingDateTimeChange} outingDateTime={props.outingDateTime}/>
-                    </Paper>
                 </Grid>
                 <Grid item>
                     <Paper elevation={6}>
                         <ReasonsForm onChange = {handleReasonsFormChange}/>
-                        <CreateButton onClick = {handleCreateButtonClick}/>
                     </Paper>
                 </Grid>
+                <Grid item>
+                    <Grid container justify="flex-end">
+                        <Grid item>
+                            <CreateButton onClick = {handleCreateButtonClick}/>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Grid>
-
         </Container>
         
 

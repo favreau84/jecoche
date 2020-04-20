@@ -1,5 +1,5 @@
 import React from 'react'
-import {TextField, Typography, Grid} from '@material-ui/core'
+import {TextField, Grid} from '@material-ui/core'
 
 export default function OutingDateTime(props) {
 
@@ -10,9 +10,6 @@ export default function OutingDateTime(props) {
 
     return (
         <div >
-            <Typography variant='h6'>
-                Votre sortie
-            </Typography>
             <form>
                 <Grid container spacing={1} >
                     <Grid item xs={6}> 
