@@ -37,7 +37,7 @@ function Home(props) {
   return (
     <div>
         <Container maxWidth='xs'>
-            <Grid container style={{height:'100vh'}} spacing={2} direction='column' alignItems='stretch' justify='space-around'>
+            <Grid container spacing={2} direction='column' alignItems='stretch' justify='space-around'>
                 <Grid item>
                     <Grid container alignItems='flex-end' justify='space-between'>
                         <Grid item>
