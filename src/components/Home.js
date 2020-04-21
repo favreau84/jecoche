@@ -34,6 +34,13 @@ function Home(props) {
       return props.onOutingDateTimeChange(newOutingDateTime)
   }
 
+  // direct to 'Profile' if no username.
+  React.useEffect(()=>{
+      if(!profile.firstName){
+          props.history.push('/profile')
+      }
+  })
+
   return (
     <div>
         <Container maxWidth='xs'>

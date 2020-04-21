@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route} from 'react-router-dom'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Home from './components/Home'
 import Profile from './components/Profile'
 
@@ -54,7 +54,8 @@ function App(props) {
   return (
     <div className="App">
       <BrowserRouter>
-        <Route path='/' exact render={()=>{
+      <Switch>
+      <Route path='/' exact render={()=>{
           return (<Home 
             profile = {profile} 
             onOutingDateTimeChange = {handleOutingDateTimeChange} 
@@ -63,6 +64,9 @@ function App(props) {
         }
         />
         <Route path="/profile" render={()=><Profile onSubmit = {handleProfileSubmit} profile={profile}/>}/>
+
+      </Switch>
+
       </BrowserRouter>
 
     </div>

@@ -1,10 +1,11 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
 
-import {TextField, Button, IconButton, Grid} from '@material-ui/core'
+import {TextField, Button, IconButton, Grid, Typography} from '@material-ui/core'
 import {Close} from '@material-ui/icons'
 
 import { makeStyles } from '@material-ui/core/styles';
+import eyes from '../assets/eyes.gif';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
       width:300
     },
   },
+  info: {
+  },
+  image: {
+      width: 150
+  }
 }));
 
 function Profile(props){
@@ -45,6 +51,14 @@ function Profile(props){
                             </IconButton>
                         </Grid>
                 </Grid>
+            </Grid>
+            <Grid item className={classes.info}>
+                <Typography  variant="body">
+                    Remplissez une fois pour toute votre profile.
+                </Typography>
+            </Grid>
+            <Grid item>
+                <img alt=":-)" src={eyes} className={classes.image}/>
             </Grid>
             <Grid item>
                 <form>
