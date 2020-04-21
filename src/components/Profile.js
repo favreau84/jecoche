@@ -31,9 +31,30 @@ function Profile(props){
         props.onSubmit(profile);
         props.history.push('/');
     }
+    function _addslash(input){
+        // 249 => 24/9
+        const r1 = /^(?<day>\d\d)(?<monthStart>\d)\b/g 
+        const mr1 = r1.exec(input)
+        if(mr1){
+            const {groups:{day, monthStart}} = mr1
+            return `${day}/${monthStart}`
+        }
+        // 24098 => 24/09/8
+        const r2 = /^(?<day>\d\d)\/(?<month>\d\d)(?<yearStart>\d)\b/g 
+        const mr2 = r2.exec(input)
+        if(mr2){
+            const {groups:{day, month, yearStart}} = mr2
+            return `${day}/${month}/${yearStart}`
+        }
+        return input
+    }
 
     function handleFieldChange(id,value){
-        setProfile(profile => ({...profile,[id]:value}))
+        let v = value
+        if(id==="birthDate"){
+            v=_addslash(v)
+        }
+        setProfile(profile => ({...profile,[id]:v}))
     }
 
     function handleClose(){
@@ -53,7 +74,7 @@ function Profile(props){
                 </Grid>
             </Grid>
             <Grid item className={classes.info}>
-                <Typography  variant="body">
+                <Typography  variant="body1">
                     Remplissez une fois pour toute votre profil.
                 </Typography>
             </Grid>
@@ -79,6 +100,7 @@ function Profile(props){
                     <div>
                         <TextField id="birthDate" 
                         label="Date de naissance" 
+                        inputProps={{inputMode:'numeric'}}
                         variant="filled" 
                         onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
                         value={profile.birthDate}/>
