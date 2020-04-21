@@ -54,7 +54,7 @@ function Profile(props){
             </Grid>
             <Grid item className={classes.info}>
                 <Typography  variant="body">
-                    Remplissez une fois pour toute votre profile.
+                    Remplissez une fois pour toute votre profil.
                 </Typography>
             </Grid>
             <Grid item>
