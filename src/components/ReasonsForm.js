@@ -1,26 +1,22 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import {FormControl, FormLabel, FormControlLabel, Checkbox, FormGroup} from '@material-ui/core'
+import {Checkbox, Typography} from '@material-ui/core'
+
+import {List, ListItem, ListItemSecondaryAction, ListItemIcon, ListItemText} from "@material-ui/core"
+import {ShoppingCart,LocalPharmacy, EmojiPeople, BusinessCenter,ChildCare, NaturePeople, AccountBalance} from '@material-ui/icons'
 
 const outingReasons = [
-    {id:'work', title:'Travail'},
-    {id:'shopping', title:'Courses'},
-    {id:'health', title:'Santé'},
-    {id:'family', title:'Famille'},
-    {id:'sport', title:'Sport'},
-    {id:'justice', title:'Justice'},
-    {id:'missions', title:'Missions'},
+    {id:'work', title:'Travail',icon:BusinessCenter, description:"Déplacements professionnels"},
+    {id:'shopping', title:'Courses',icon:ShoppingCart, description:"Achats de première nécessité"},
+    {id:'health', title:'Santé',icon:LocalPharmacy, description:"Consultations médicales"},
+    {id:'family', title:'Famille', icon:ChildCare, description:"Garde d'enfants, assistance à une personne vulnérable"},
+    {id:'sport', title:'Sport',icon:NaturePeople, description:"Se dégourdir les jambes..."},
+    {id:'justice', title:'Justice', icon:AccountBalance, description:"Convocation judiciaire ou administrative"},
+    {id:'missions', title:'Missions', icon:EmojiPeople,description: "Missions d'intérêt général sur demande de l'autorité administrative"}
 ];
-
-const useStyles = makeStyles((theme) =>({
-    formControl: {
-        margin: theme.spacing(3)
-    }
-}))
 
 const ReasonsForm = function(props){
     
-    const getInitialState = function(){
+    const _getInitialState = function(){
         let initialState = {}
         outingReasons.forEach(reason => {
             initialState = {...initialState,[reason.id]:false}
@@ -28,35 +24,39 @@ const ReasonsForm = function(props){
         
         return initialState;
     }
-    const [state, setState] = React.useState(getInitialState())
-
-    const classes = useStyles();
+    const [state, setState] = React.useState(_getInitialState())
 
     React.useEffect(() => {
         props.onChange(state)
     },[state,props]);
 
-    const handleChange = function(event){
-        setState(state => ({...state,[event.target.name]:event.target.checked}))
+    const handleChange = (id) => () => {
+        setState(state=>({...state,[id]:!(state[id])}))
     }
+
     return(
-        <FormControl component="fieldset" className={classes.formControl}>
-        <FormLabel component="legend">Motifs de déplacement</FormLabel>
-        <FormGroup>
-            {outingReasons.map(reason => {
-                return (
-                    <FormControlLabel key={reason.id}
-                    control={<Checkbox 
-                                checked={state[reason.id]} 
-                                onChange={handleChange} 
-                                name={reason.id} 
-                            />}
-                    label={reason.title}
-                  />
-                )
-            })}
-        </FormGroup>
-      </FormControl>
+        <React.Fragment>
+            <List>
+                {outingReasons.map(({id,title,icon,description})=>{
+                    return(<ListItem button key={id} onClick={handleChange(id)}>
+                        <ListItemIcon>
+                            {React.createElement(icon, {})}
+                        </ListItemIcon>
+                        <ListItemText>
+                             <Typography variant='h6'>{title}</Typography>
+                             <Typography variant='body2'>{description}</Typography>
+                        </ListItemText>
+                        <ListItemSecondaryAction>
+                            <Checkbox
+                                checked={state[id]} 
+                                onChange={handleChange(id)}
+                            />
+                        </ListItemSecondaryAction>
+
+                    </ListItem>)
+                })}
+            </List>
+        </React.Fragment>     
     )
 }
 
