@@ -124,6 +124,7 @@ function Profile(props){
                         label="Code postal"
                         type="number" 
                         variant="filled" 
+                        inputProps={{inputMode:'numeric'}}
                         onChange={({target: {id,value}})=>handleFieldChange(id,value)} 
                         value={profile.addressZipcode}/>
                     </div>
