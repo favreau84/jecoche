@@ -74,8 +74,8 @@ function Home(props) {
                     if(storedPdf.pdfBlob){
                         await db.pdfOS.clear()
                         storedPdf.pdfArrayBuffer = await blobToArrayBuffer(storedPdf.pdfBlob)
+                        await db.pdfOS.add({...storedPdf,pdfBlob:null})
                     }
-                    await db.pdfOS.add({...storedPdf,pdfBlob:null})
                 }
             }
             store();
