@@ -20,6 +20,22 @@ const useStyles = makeStyles({
     }
 })
 
+// Helpers to save Blob in indexedDB
+function arrayBufferToBlob(buffer, type) {
+    return new Blob([buffer], {type: type});
+  }
+function blobToArrayBuffer(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.addEventListener('loadend', (e) => {
+        resolve(reader.result);
+        });
+        reader.addEventListener('error', reject);
+        reader.readAsArrayBuffer(blob);
+    });
+}
+
+
 function Home(props) {
 
     const classes = useStyles()
@@ -36,26 +52,10 @@ function Home(props) {
     function _useStoredPdf(){
         
         const [storedPdf, setStoredPdf] = React.useState({pdfBlob:null,generatedDate:null,generatedTime:null})
-            // console.log(database)
-            // const initialStoredPdf = await database.get('pdfOS',1)
-            // return(initialStoredPdf)
-                // if(pdfInIdb){
-                //     return await db.get('pdfOS',1)
-                // } else {
-                //     console.log(init)
-                //     return {pdfBlob:null,generatedDate:null,generatedTime:null}
-                // }
             
         React.useEffect(()=>{
             async function store(){
-                // const db = await openDB('Certifications',1,{
-                //     upgrade(db){
-                //         db.createObjectStore('pdfOS', {
-                //             keyPath: 'id', 
-                //             autoIncrement:true
-                //         })
-                //     }
-                // })
+   
                 const db = new Dexie('Certifications')
                 db.version(1).stores({
                     pdfOS:'++id'
@@ -65,11 +65,16 @@ function Home(props) {
                     const pdfCount = await (db.pdfOS.toCollection().count())
                     if(pdfCount !== 0){
                         //setStoredPdf(await db.get('pdfOS',keys.pop()))
-                        setStoredPdf(await db.pdfOS.toCollection().last())
+                        const {pdfArrayBuffer, generatedDate, generatedTime} = await db.pdfOS.toCollection().last()
+                        const pdfBlob = arrayBufferToBlob(pdfArrayBuffer, 'application/pdf')
+                        setStoredPdf({pdfBlob,generatedDate, generatedTime})
                     }
                     setFirstRendered(true)
                 } else {
                     await db.pdfOS.clear()
+                    if(storedPdf.pdfBlob){
+                        storedPdf.pdfArrayBuffer = await blobToArrayBuffer(storedPdf.pdfBlob)
+                    }
                     await db.pdfOS.add(storedPdf)
                 }
             }
