@@ -94,7 +94,7 @@ function Home(props) {
     const newCertif = new Certificate({outingDateTime,profile,reasons})
     await newCertif.generatePdf();
     setStoredPdf(()=>({...storedPdf,generatedDate:newCertif.pdfGenerationDate,generatedTime:newCertif.pdfGenerationTime,pdfBlob:newCertif.pdfBlob}))
-    newCertif.downloadPdf();
+    //newCertif.downloadPdf();
   }
 
   function handleProfileButtonClick(){
