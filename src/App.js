@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Home from './components/Home'
 import Profile from './components/Profile'
 
+
 import './App.css';
 
 function App(props) {
@@ -38,13 +39,11 @@ function App(props) {
   // outingDateTime state
 
   const _initializeOutingDateTime = function(){
-
     return ({
         outingDate : new Date().toLocaleDateString('fr-FR'),
         outingTime : new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', 'h')
     })
   }
-
   const [outingDateTime, setOutingDateTime] = React.useState(()=>_initializeOutingDateTime());
 
   function handleOutingDateTimeChange(newOutingDateTime){

@@ -1,6 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
-import {Container, Grid, Paper, Divider} from '@material-ui/core'
+import {Container, Grid, Paper, Divider, makeStyles} from '@material-ui/core'
+import {openDB} from 'idb'
 
 import CreateButton from './CreateButton'
 import ProfileSummary from './ProfileSummary'
@@ -8,21 +9,80 @@ import ReasonsForm from './ReasonsForm'
 import ProfileButton from'./ProfileButton'
 import OutingDateTime from './OutingDateTime'
 import Certificate from '../services/certificate/certificate'
+import LastCertificate from './LastCertificate'
+
+const useStyles = makeStyles({
+    alert:{
+        backgroundColor:'#ffe9fd',
+        padding:'10px'
+    }
+})
 
 function Home(props) {
 
-  const profile = props.profile
-  const outingDateTime = props.outingDateTime
+    const classes = useStyles()
+    const profile = props.profile
+    const outingDateTime = props.outingDateTime
 
-  const[reasons, setReasons] = React.useState({work: false, shopping: false, health: false});
+    const[reasons, setReasons] = React.useState({work: false, shopping: false, health: false});
+
+    // generatedPDF
+
+    // state to trakc IDB opening
+    const [firstRendered, setFirstRendered] = React.useState(false)
+    
+    function _useStoredPdf(){
+        
+        const [storedPdf, setStoredPdf] = React.useState({pdfBlob:null,generatedDate:null,generatedTime:null})
+            // console.log(database)
+            // const initialStoredPdf = await database.get('pdfOS',1)
+            // return(initialStoredPdf)
+                // if(pdfInIdb){
+                //     return await db.get('pdfOS',1)
+                // } else {
+                //     console.log(init)
+                //     return {pdfBlob:null,generatedDate:null,generatedTime:null}
+                // }
+            
+        React.useEffect(()=>{
+            async function store(){
+                const db = await openDB('Certifications',1,{
+                    upgrade(db){
+                        db.createObjectStore('pdfOS', {
+                            keyPath: 'id', 
+                            autoIncrement:true
+                        })
+                    }
+                })
+                console.log('first rendered ? : ',firstRendered)
+                if(!firstRendered){
+                    const keys = await db.getAllKeys('pdfOS')
+                    console.log('keys', keys)
+                    if(keys.length > 0){
+                        setStoredPdf(await db.get('pdfOS',keys.pop()))
+                    }
+                    setFirstRendered(true)
+                }else {
+                    await db.clear('pdfOS')
+                    await db.add('pdfOS',storedPdf)
+                }
+            }
+            store();
+        },[storedPdf])
+        
+        return [storedPdf, setStoredPdf]
+    }
+    
+    const [storedPdf, setStoredPdf] = _useStoredPdf()
 
   const handleReasonsFormChange = function(newReasons){
     setReasons(newReasons);
   }
 
   async function handleCreateButtonClick(){
-    const newCertif = new Certificate({outingDateTime,profile, reasons})
+    const newCertif = new Certificate({outingDateTime,profile,reasons})
     await newCertif.generatePdf();
+    setStoredPdf(()=>({...storedPdf,generatedDate:newCertif.pdfGenerationDate,generatedTime:newCertif.pdfGenerationTime,pdfBlob:newCertif.pdfBlob}))
     newCertif.downloadPdf();
   }
 
@@ -55,6 +115,18 @@ function Home(props) {
                         </Grid>
                     </Grid>
                 </Grid> 
+                <Grid item>
+                    <Divider/>
+                </Grid>
+                <Grid item>
+                    {(storedPdf && storedPdf.generatedTime)
+                    ? <LastCertificate lastCertificate={storedPdf}/> 
+                    : ( <Container className={classes.alert}>
+                        <span role='img' aria-label="/!\"> ⚠️ Aucune attestation disponible 😷 💸 💸 👮</span>
+                    </Container>
+                    
+                    )}
+                </Grid>
                 <Grid item>
                     <Divider/>
                 </Grid>

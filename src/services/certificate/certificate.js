@@ -1,6 +1,8 @@
 import { PDFDocument, StandardFonts } from 'pdf-lib'
+import {openDB} from 'idb'
 import basePdf from './certificate.pdf'
 import Qrcode from '../qrcode'
+
 
 class Certificate {
     
@@ -47,6 +49,8 @@ class Certificate {
         this.fields.outingMinutes = outingTime.split('h')[1];
         this.inputs.reasons = _setReasons(reasons)
         this.pdfBlob = null
+        this.pdfGenerationDate = null
+        this.pdfGenerationTime = null
     }
 
     template = {
@@ -68,8 +72,8 @@ class Certificate {
     };
 
     generatePdf =  async function(){
-        const pdfGenerationDate = new Date().toLocaleDateString('fr-FR')
-        const pdfGenerationTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', 'h')
+        this.pdfGenerationDate = new Date().toLocaleDateString('fr-FR')
+        this.pdfGenerationTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', 'h')
 
         const basePdfBytes = await fetch(basePdf).then(res => res.arrayBuffer())
         const pdf = await PDFDocument.load(basePdfBytes)
@@ -86,13 +90,13 @@ class Certificate {
         }
         // Date création
             p1.drawText('Date de création:', {x:464,y:150,size:7,font:font});
-            p1.drawText(`${pdfGenerationDate} à ${pdfGenerationTime}`,{x:455,y:144,size:7,font:font});
+            p1.drawText(`${this.pdfGenerationDate} à ${this.pdfGenerationTime}`,{x:455,y:144,size:7,font:font});
 
         //Add qrcode
         const qr = new Qrcode(
             {
-                createdAtDate: pdfGenerationDate, 
-                createdAtTime:pdfGenerationTime, 
+                createdAtDate: this.pdfGenerationDate, 
+                createdAtTime:this.pdfGenerationTime, 
                 lastName: this.inputs.lastName, 
                 firstName: this.inputs.firstName, 
                 birthDate: this.fields.birthDate, 
@@ -136,6 +140,17 @@ class Certificate {
         link.download = 'certificate.pdf'
         document.body.appendChild(link)
         link.click()
+    }
+    
+    storePdf = async function(){
+        const db = await openDB('Certificates',1,{
+            upgrade(db){
+                const store = db.createObjectStore('pdfOS',{keyPath:'id',autoIncrement:true});
+                return store
+            }}
+        )
+        await db.clear('pdfOS')
+        await db.add("pdfOS",this.pdfBlob)
     }
 } 
 
