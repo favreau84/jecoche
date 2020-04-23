@@ -71,8 +71,8 @@ function Home(props) {
                     }
                     setFirstRendered(true)
                 } else {
-                    await db.pdfOS.clear()
                     if(storedPdf.pdfBlob){
+                        await db.pdfOS.clear()
                         storedPdf.pdfArrayBuffer = await blobToArrayBuffer(storedPdf.pdfBlob)
                     }
                     await db.pdfOS.add({...storedPdf,pdfBlob:null})
@@ -115,18 +115,19 @@ function Home(props) {
   // alert message
   const lastCertificateContainer=(
       <React.Fragment>
-                <Grid item>
-                    {(storedPdf && storedPdf.generatedTime)
-                    ? <LastCertificate lastCertificate={storedPdf}/> 
-                    : ( <Container className={classes.alert}>
-                        <span role='img' aria-label="/!\"> ⚠️ Aucune attestation disponible 😷 💸 💸 👮</span>
-                    </Container>
-                    
-                    )}
+            {(storedPdf && storedPdf.generatedTime)
+            ? (
+            <><Grid item>
+                    <LastCertificate lastCertificate={storedPdf}/> 
                 </Grid>
                 <Grid item>
                     <Divider/>
-                </Grid>
+                </Grid> </>)
+            : (<div></div>)
+            // : ( <Container className={classes.alert}>
+            //     <span role='img' aria-label="/!\"> ⚠️ Aucune attestation disponible 😷 💸 💸 👮</span>
+            // </Container>
+            }
       </React.Fragment>
   )
 
