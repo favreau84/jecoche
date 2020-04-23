@@ -2,6 +2,7 @@ import React from 'react';
 import {withRouter} from 'react-router-dom'
 import {Container, Grid, Paper, Divider, makeStyles} from '@material-ui/core'
 //import {openDB} from 'idb'
+import setGlobalVars from 'indexeddbshim'
 import Dexie from 'dexie'
 
 import CreateButton from './CreateButton'

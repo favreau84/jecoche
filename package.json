@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^7.2.1",
     "dexie": "^2.0.4",
     "idb": "^5.0.2",
+    "indexeddbshim": "^6.1.0",
     "pdf-lib": "^1.4.1",
     "qrcode": "^1.4.4",
     "react": "^16.13.1",
