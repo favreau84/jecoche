@@ -119,7 +119,7 @@ function Home(props) {
                     {(storedPdf && storedPdf.generatedTime)
                     ? <LastCertificate lastCertificate={storedPdf}/> 
                     : ( <Container className={classes.alert}>
-                        <span role='img' aria-label="/!\"> ⚠️ Aucune attestation stockée 😷 💸 💸 👮</span>
+                        <span role='img' aria-label="/!\"> ⚠️ Aucune attestation disponible 😷 💸 💸 👮</span>
                     </Container>
                     
                     )}
