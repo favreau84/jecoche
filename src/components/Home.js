@@ -1,7 +1,8 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import {Container, Grid, Paper, Divider, makeStyles} from '@material-ui/core'
-import {openDB} from 'idb'
+//import {openDB} from 'idb'
+import Dexie from 'dexie'
 
 import CreateButton from './CreateButton'
 import ProfileSummary from './ProfileSummary'
@@ -46,25 +47,29 @@ function Home(props) {
             
         React.useEffect(()=>{
             async function store(){
-                const db = await openDB('Certifications',1,{
-                    upgrade(db){
-                        db.createObjectStore('pdfOS', {
-                            keyPath: 'id', 
-                            autoIncrement:true
-                        })
-                    }
+                // const db = await openDB('Certifications',1,{
+                //     upgrade(db){
+                //         db.createObjectStore('pdfOS', {
+                //             keyPath: 'id', 
+                //             autoIncrement:true
+                //         })
+                //     }
+                // })
+                const db = new Dexie('Certifications')
+                db.version(1).stores({
+                    pdfOS:'++id'
                 })
                 console.log('first rendered ? : ',firstRendered)
                 if(!firstRendered){
-                    const keys = await db.getAllKeys('pdfOS')
-                    console.log('keys', keys)
-                    if(keys.length > 0){
-                        setStoredPdf(await db.get('pdfOS',keys.pop()))
+                    const pdfCount = await (db.pdfOS.toCollection().count())
+                    if(pdfCount !== 0){
+                        //setStoredPdf(await db.get('pdfOS',keys.pop()))
+                        setStoredPdf(await db.pdfOS.toCollection().last())
                     }
                     setFirstRendered(true)
-                }else {
-                    await db.clear('pdfOS')
-                    await db.add('pdfOS',storedPdf)
+                } else {
+                    await db.pdfOS.clear()
+                    await db.pdfOS.add(storedPdf)
                 }
             }
             store();
@@ -101,6 +106,24 @@ function Home(props) {
       }
   })
 
+  // alert message
+  const lastCertificateContainer=(
+      <React.Fragment>
+                <Grid item>
+                    {(storedPdf && storedPdf.generatedTime)
+                    ? <LastCertificate lastCertificate={storedPdf}/> 
+                    : ( <Container className={classes.alert}>
+                        <span role='img' aria-label="/!\"> ⚠️ Aucune attestation disponible 😷 💸 💸 👮</span>
+                    </Container>
+                    
+                    )}
+                </Grid>
+                <Grid item>
+                    <Divider/>
+                </Grid>
+      </React.Fragment>
+  )
+
   return (
     <div>
         <Container maxWidth='xs'>
@@ -118,18 +141,7 @@ function Home(props) {
                 <Grid item>
                     <Divider/>
                 </Grid>
-                <Grid item>
-                    {(storedPdf && storedPdf.generatedTime)
-                    ? <LastCertificate lastCertificate={storedPdf}/> 
-                    : ( <Container className={classes.alert}>
-                        <span role='img' aria-label="/!\"> ⚠️ Aucune attestation disponible 😷 💸 💸 👮</span>
-                    </Container>
-                    
-                    )}
-                </Grid>
-                <Grid item>
-                    <Divider/>
-                </Grid>
+                {lastCertificateContainer}
                 <Grid item>
                         <OutingDateTime onChange={handleOutingDateTimeChange} outingDateTime={props.outingDateTime}/>
                 </Grid>
