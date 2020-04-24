@@ -99,10 +99,9 @@ function Home(props) {
                 <Grid item>
                     <Divider/>
                 </Grid> </>)
-            : (<div></div>)
-            // : ( <Container className={classes.alert}>
-            //     <span role='img' aria-label="/!\"> ⚠️ Aucune attestation disponible 😷 💸 💸 👮</span>
-            // </Container>
+            : ( <Container style={{backgroundColor:"#F5E9F6", padding:'20px'}}>
+                <span role='img' aria-label="/!\"> ⚠️ Aucune attestation disponible 😷 💸 💸 👮</span>
+            </Container>)
             }
       </React.Fragment>
   )

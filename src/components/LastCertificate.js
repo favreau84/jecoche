@@ -1,11 +1,11 @@
 import React from 'react'
-import {Grid, Button, Typography} from '@material-ui/core'
+import {Grid, Button} from '@material-ui/core'
 import {PictureAsPdf} from '@material-ui/icons'
 import {makeStyles} from '@material-ui/core'
 
 const useStyles = makeStyles({
     note:{
-        textSize:'0.7rem'
+        fontSize:'0.9rem',
     },
     button:{
         leftMargin: 'auto'
@@ -24,9 +24,9 @@ export default function LastCertificate({lastCertificate: {generatedDate, genera
     return (
         <Grid container alignItems='center'>
             <Grid item xs={7}>
-                <Typography className={classes.note}>
+                <p className={classes.note}>
                     {`Votre dernière attestation a été générée le ${generatedDate} à ${generatedTime}`}
-                </Typography>
+                </p>
                 
             </Grid>
             <Grid item xs={5}>
