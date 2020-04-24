@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
-import {Container, Grid, Paper, Divider, makeStyles} from '@material-ui/core'
+import {Container, Grid, Paper, Divider} from '@material-ui/core'
 import db from '../services/db'
 
 import CreateButton from './CreateButton'
@@ -11,12 +11,6 @@ import OutingDateTime from './OutingDateTime'
 import Certificate from '../services/certificate/certificate'
 import LastCertificate from './LastCertificate'
 
-const useStyles = makeStyles({
-    alert:{
-        backgroundColor:'#ffe9fd',
-        padding:'10px'
-    }
-})
 
 // Helpers to save Blob in indexedDB
 function arrayBufferToBlob(buffer, type) {
@@ -36,38 +30,23 @@ function blobToArrayBuffer(blob) {
 
 function Home(props) {
 
-    const classes = useStyles()
     const profile = props.profile
     const outingDateTime = props.outingDateTime
 
     const[reasons, setReasons] = React.useState({work: false, shopping: false, health: false});
+    const [storedPdf, setStoredPdf] = React.useState({pdfBlob:null,generatedDate:null,generatedTime:null})
 
-    // generatedPDF
-    
-    function _useStoredPdf(){
-        
-        const [storedPdf, setStoredPdf] = React.useState({pdfBlob:null,generatedDate:null,generatedTime:null})
-            
-        React.useEffect(()=>{
-            async function store(){
-                const pdfCount = await (db.pdfOS?.toCollection().count())
-                if(storedPdf.pdfBlob) {
-                    await db.pdfOS.clear()
-                    storedPdf.pdfArrayBuffer = await blobToArrayBuffer(storedPdf.pdfBlob)
-                    await db.pdfOS.add({...storedPdf,pdfBlob:null})
-                } else if(pdfCount && pdfCount !== 0){
-                    const {pdfArrayBuffer, generatedDate, generatedTime} = await db.pdfOS.toCollection().last()
-                    const pdfBlob = arrayBufferToBlob(pdfArrayBuffer, 'application/pdf')
-                    setStoredPdf({pdfBlob,generatedDate, generatedTime})
-                }
+    React.useEffect(()=>{
+        async function store(){
+            const pdfCount = await (db.pdfOS?.toCollection().count())
+            if(pdfCount && pdfCount !== 0){
+                const {pdfArrayBuffer, generatedDate, generatedTime} = await db.pdfOS.toCollection().last()
+                const pdfBlob = arrayBufferToBlob(pdfArrayBuffer, 'application/pdf')
+                setStoredPdf({pdfBlob,generatedDate, generatedTime})
             }
-            store();
-        },[storedPdf])
-        
-        return [storedPdf, setStoredPdf]
-    }
-
-    const [storedPdf, setStoredPdf] = _useStoredPdf()
+        }
+        store();
+    },[])
 
   const handleReasonsFormChange = function(newReasons){
     setReasons(newReasons);
@@ -76,7 +55,21 @@ function Home(props) {
   async function handleCreateButtonClick(){
     const newCertif = new Certificate({outingDateTime,profile,reasons})
     await newCertif.generatePdf();
-    setStoredPdf(()=>({...storedPdf,generatedDate:newCertif.pdfGenerationDate,generatedTime:newCertif.pdfGenerationTime,pdfBlob:newCertif.pdfBlob}))
+    const {pdfGenerationDate, pdfGenerationTime,pdfBlob} = newCertif
+    const pdfArrayBuffer = await blobToArrayBuffer(pdfBlob)
+    const newPDF_state = {
+        pdfBlob, 
+        generatedDate: pdfGenerationDate, 
+        generatedTime: pdfGenerationTime
+    }
+    const newPDF_db = {
+        pdfArrayBuffer, 
+        generatedDate: pdfGenerationDate, 
+        generatedTime: pdfGenerationTime 
+    }
+    await db.pdfOS.clear()
+    await db.pdfOS.add(newPDF_db)
+    setStoredPdf(newPDF_state)
     newCertif.downloadPdf();
   }
 

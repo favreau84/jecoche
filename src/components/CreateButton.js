@@ -15,6 +15,7 @@ export default function CreateButton(props) {
                     color='primary' 
                     style={style}
                     onClick = {props.onClick}
+                    size = 'large'
                 > 
                     Générer l'attestation 
                 </Button> 
