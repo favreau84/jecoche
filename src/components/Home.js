@@ -1,9 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import {Container, Grid, Paper, Divider, makeStyles} from '@material-ui/core'
-//import {openDB} from 'idb'
-import setGlobalVars from 'indexeddbshim'
-import Dexie from 'dexie'
+import db from '../services/db'
 
 import CreateButton from './CreateButton'
 import ProfileSummary from './ProfileSummary'
@@ -45,9 +43,6 @@ function Home(props) {
     const[reasons, setReasons] = React.useState({work: false, shopping: false, health: false});
 
     // generatedPDF
-
-    // state to trakc IDB opening
-    const [firstRendered, setFirstRendered] = React.useState(false)
     
     function _useStoredPdf(){
         
@@ -55,27 +50,15 @@ function Home(props) {
             
         React.useEffect(()=>{
             async function store(){
-   
-                const db = new Dexie('Certifications')
-                db.version(1).stores({
-                    pdfOS:'++id'
-                })
-                console.log('first rendered ? : ',firstRendered)
-                if(!firstRendered){
-                    const pdfCount = await (db.pdfOS.toCollection().count())
-                    if(pdfCount !== 0){
-                        //setStoredPdf(await db.get('pdfOS',keys.pop()))
-                        const {pdfArrayBuffer, generatedDate, generatedTime} = await db.pdfOS.toCollection().last()
-                        const pdfBlob = arrayBufferToBlob(pdfArrayBuffer, 'application/pdf')
-                        setStoredPdf({pdfBlob,generatedDate, generatedTime})
-                    }
-                    setFirstRendered(true)
-                } else {
-                    if(storedPdf.pdfBlob){
-                        await db.pdfOS.clear()
-                        storedPdf.pdfArrayBuffer = await blobToArrayBuffer(storedPdf.pdfBlob)
-                        await db.pdfOS.add({...storedPdf,pdfBlob:null})
-                    }
+                const pdfCount = await (db.pdfOS?.toCollection().count())
+                if(storedPdf.pdfBlob) {
+                    await db.pdfOS.clear()
+                    storedPdf.pdfArrayBuffer = await blobToArrayBuffer(storedPdf.pdfBlob)
+                    await db.pdfOS.add({...storedPdf,pdfBlob:null})
+                } else if(pdfCount && pdfCount !== 0){
+                    const {pdfArrayBuffer, generatedDate, generatedTime} = await db.pdfOS.toCollection().last()
+                    const pdfBlob = arrayBufferToBlob(pdfArrayBuffer, 'application/pdf')
+                    setStoredPdf({pdfBlob,generatedDate, generatedTime})
                 }
             }
             store();
@@ -83,7 +66,7 @@ function Home(props) {
         
         return [storedPdf, setStoredPdf]
     }
-    
+
     const [storedPdf, setStoredPdf] = _useStoredPdf()
 
   const handleReasonsFormChange = function(newReasons){
@@ -94,7 +77,7 @@ function Home(props) {
     const newCertif = new Certificate({outingDateTime,profile,reasons})
     await newCertif.generatePdf();
     setStoredPdf(()=>({...storedPdf,generatedDate:newCertif.pdfGenerationDate,generatedTime:newCertif.pdfGenerationTime,pdfBlob:newCertif.pdfBlob}))
-    //newCertif.downloadPdf();
+    newCertif.downloadPdf();
   }
 
   function handleProfileButtonClick(){
