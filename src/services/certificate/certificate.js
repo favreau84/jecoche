@@ -34,8 +34,8 @@ class Certificate {
         shopping: "achats",
         health: "sante",
         family: "famille",
-        sport: "sport",
-        justice: "judiciaire",
+        sport: "sport_animaux",
+        justice: "convocation",
         missions: "missions",
         school: "enfants",
         handicap: "handicap",
@@ -43,7 +43,7 @@ class Certificate {
       const reasons = Object.keys(mapping)
         .map((reason) => (reasonsObject[reason] ? mapping[reason] : ""))
         .filter((reasonFr) => !!reasonFr)
-        .join("-");
+        .join(", ");
       console.log(reasons);
       return reasons;
     }
@@ -70,8 +70,9 @@ class Certificate {
     this.fields.school = school ? "x" : "";
     this.fields.outingLocation = addressCity;
     this.fields.outingDate = outingDate;
-    this.fields.outingHours = outingTime.split("h")[0];
-    this.fields.outingMinutes = outingTime.split("h")[1];
+    // this.fields.outingHours = outingTime.split("h")[0];
+    // this.fields.outingMinutes = outingTime.split("h")[1];
+    this.fields.outingTime = outingTime;
     this.inputs.reasons = _setReasons(reasons);
     this.pdfBlob = null;
     this.pdfGenerationDate = null;
@@ -93,8 +94,9 @@ class Certificate {
     handicap: { x: 84, y: 396, size: 18 },
     school: { x: 84, y: 211, size: 18 },
     outingLocation: { x: 105, y: 177, size: 11 },
-    outingHours: { x: 264, y: 153, size: 11 },
-    outingMinutes: { x: 284, y: 153, size: 11 },
+    // outingHours: { x: 264, y: 153, size: 11 },
+    // outingMinutes: { x: 284, y: 153, size: 11 },
+    outingTime: { x: 264, y: 153, size: 11 },
     outingDate: { x: 91, y: 153, size: 11 },
   };
 
@@ -155,8 +157,8 @@ class Certificate {
       addressZipcode: this.inputs.addressZipcode,
       addressCity: this.inputs.addressCity,
       outingDate: this.fields.outingDate,
-      outingHours: this.fields.outingHours,
-      outingMinutes: this.fields.outingMinutes,
+      outingHours: this.fields.outingTime.split("h")[0],
+      outingMinutes: this.fields.outingTime.split("h")[1],
       reasons: this.inputs.reasons,
     });
     const generatedQR = await qr.generateQR();

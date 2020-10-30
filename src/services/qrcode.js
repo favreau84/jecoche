@@ -22,7 +22,7 @@ class Qrcode {
       `Prenom: ${firstName}`,
       `Naissance: ${birthDate} a ${birthPlace}`,
       `Adresse: ${addressStreet} ${addressZipcode} ${addressCity}`,
-      `Sortie: ${outingDate} a ${outingHours}h${outingMinutes}`,
+      `Sortie: ${outingDate} a ${outingHours}:${outingMinutes}`,
       `Motifs: ${reasons}`,
     ].join(";\n ");
   }
