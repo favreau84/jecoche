@@ -1,24 +1,33 @@
 import React from 'react'
-import {Button, Grid} from '@material-ui/core'
+import {Fab, Grid, makeStyles} from '@material-ui/core'
+import {useTheme} from '@material-ui/core/styles'
 
-const style = {
-    margin: "10px"
-}
+const useStyles = makeStyles(theme => ({
+    fab: {
+        margin: "10px",
+        position: "fixed",
+        bottom: theme.spacing(2),
+        right: theme.spacing(2)
+    }
+}));
 
 export default function CreateButton(props) {
     
+    const theme = useTheme();
+    const classes = useStyles(theme);
+
     return (
         <Grid container justify='flex-end'>
             <Grid item>
-                <Button 
-                    variant="contained" 
+                <Fab 
+                    variant="extended" 
                     color='primary' 
-                    style={style}
+                    className={classes.fab}
                     onClick = {props.onClick}
                     size = 'large'
                 > 
                     Générer l'attestation 
-                </Button> 
+                </Fab> 
             </Grid>
         
         </Grid>

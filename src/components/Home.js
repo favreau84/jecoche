@@ -10,6 +10,7 @@ import ProfileButton from'./ProfileButton'
 import OutingDateTime from './OutingDateTime'
 import Certificate from '../services/certificate/certificate'
 import LastCertificate from './LastCertificate'
+import Header from './Header'
 
 
 // Helpers to save Blob in indexedDB
@@ -109,6 +110,7 @@ function Home(props) {
   return (
     <div>
         <Container maxWidth='xs'>
+            <Header/>
             <Grid container spacing={2} direction='column' alignItems='stretch' justify='space-around'>
                 <Grid item>
                     <Grid container alignItems='flex-end' justify='space-between'>
