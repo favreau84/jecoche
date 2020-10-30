@@ -14,10 +14,10 @@ import {
   EmojiPeople,
   BusinessCenter,
   ChildCare,
-  NaturePeople,
   AccountBalance,
   Accessible,
   School,
+  DirectionsRun,
 } from "@material-ui/icons";
 
 const outingReasons = [
@@ -54,7 +54,7 @@ const outingReasons = [
   {
     id: "sport",
     title: "Sport",
-    icon: NaturePeople,
+    icon: DirectionsRun,
     description: "Se dégourdir les jambes avec/sans chien",
   },
   {
