@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { Container, Grid, Paper, Divider } from "@material-ui/core";
+import { Container, Grid, Paper, Divider, Typography } from "@material-ui/core";
 import db from "../services/db";
 
 import CreateButton from "./CreateButton";
@@ -133,6 +133,9 @@ function Home(props) {
         >
           <Grid item>
             <Grid container alignItems="flex-end" justify="space-between">
+              <Grid item style={{ paddingTop: 8,background: "#F5E9F6" ,width:"100%", height:40, marginTop:"8px"}}>
+                <Typography>👍 version 28 nov. 2020</Typography>       
+              </Grid>
               <Grid item style={{ marginTop: 8 }}>
                 <ProfileSummary profile={profile} />
               </Grid>

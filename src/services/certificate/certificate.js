@@ -31,7 +31,7 @@ class Certificate {
     function _setReasons(reasonsObject) {
       const mapping = {
         work: "travail",
-        shopping: "achats",
+        shopping: "achats_culturel_cultuel",
         health: "sante",
         family: "famille",
         sport: "sport_animaux",
@@ -80,25 +80,28 @@ class Certificate {
   }
 
   template = {
-    name: { x: 119, y: 696, size: 11 },
-    birthDate: { x: 119, y: 674, size: 11 },
-    birthPlace: { x: 297, y: 674, size: 11 },
-    address: { x: 133, y: 652, size: 11 },
-    work: { x: 84, y: 578, size: 18 },
-    shopping: { x: 84, y: 533, size: 18 },
-    health: { x: 84, y: 477, size: 18 },
-    family: { x: 84, y: 435, size: 18 },
-    sport: { x: 84, y: 358, size: 18 },
-    justice: { x: 84, y: 295, size: 18 },
-    missions: { x: 84, y: 255, size: 18 },
-    handicap: { x: 84, y: 396, size: 18 },
-    school: { x: 84, y: 211, size: 18 },
-    outingLocation: { x: 105, y: 177, size: 11 },
+    name: { x: 92, y: 702, size: 11 },
+    birthDate: { x: 92, y: 684, size: 11 },
+    birthPlace: { x: 214, y: 684, size: 11 },
+    address: { x: 104, y: 665, size: 11 },
+    work: { x: 47, y: 553, size: 18 },
+    shopping: { x: 47, y: 482, size: 18 },
+    health: { x: 47, y: 434, size: 18 },
+    family: { x: 47, y: 410, size: 18 },
+    sport: { x: 47, y: 349, size: 18 },
+    justice: { x: 47, y: 276, size: 18 },
+    missions: { x: 47, y: 252, size: 18 },
+    handicap: { x: 47, y: 373, size: 18 },
+    school: { x: 47, y: 228, size: 18 },
+    outingLocation: { x: 78, y: 76, size: 11 },
     // outingHours: { x: 264, y: 153, size: 11 },
     // outingMinutes: { x: 284, y: 153, size: 11 },
-    outingTime: { x: 264, y: 153, size: 11 },
-    outingDate: { x: 91, y: 153, size: 11 },
+    outingTime: { x: 227, y: 58, size: 11 },
+    outingDate: { x: 63, y:58, size: 11 },
   };
+
+  qrTitle1 = 'QR-code contenant les informations '
+  qrTitle2 = 'de votre attestation numérique'
 
   generatePdf = async function () {
     this.pdfGenerationDate = new Date().toLocaleDateString("fr-FR");
@@ -165,7 +168,7 @@ class Certificate {
     const qrImage = await pdf.embedPng(generatedQR);
     p1.drawImage(qrImage, {
       x: p1.getWidth() - 156,
-      y: 100,
+      y: 25,
       width: 92,
       height: 92,
     });
@@ -175,7 +178,7 @@ class Certificate {
     const p2 = pdf.getPages()[1];
     p2.drawImage(qrImage, {
       x: 50,
-      y: p2.getHeight() - 350,
+      y: p2.getHeight() - 390,
       width: 300,
       height: 300,
     });

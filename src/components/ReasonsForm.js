@@ -29,9 +29,9 @@ const outingReasons = [
   },
   {
     id: "shopping",
-    title: "Achats",
+    title: "Achats pour corps et âmes",
     icon: ShoppingCart,
-    description: "Achats de première nécessité",
+  description: "Achats de première nécessité et MESSES",
   },
   {
     id: "health",
